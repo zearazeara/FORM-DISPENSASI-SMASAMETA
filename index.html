@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Dispensasi | SMAN 1 Magetan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .bg-gradient-smasa { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <header class="bg-gradient-smasa text-white py-8 px-4 rounded-b-[3rem] shadow-xl mb-8">
+        <div class="max-w-4xl mx-auto flex flex-col items-center text-center">
+            <img src="https://smasa-magetan.sch.id/wp-content/uploads/2023/06/LOGO-SMA-NEGERI-1-MAGETAN-258x300.png" 
+                 alt="Logo Smasa" class="w-24 mb-4 drop-shadow-lg">
+            <h1 class="text-3xl font-bold tracking-tight">E-DISPENSASI SISWA</h1>
+            <p class="text-blue-100 mt-2">SMA Negeri 1 Magetan</p>
+        </div>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 pb-12">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6">Form Pengisian Izin</h2>
+
+            <form id="dispensasiForm" class="space-y-5">
+                <input type="text" name="nama" placeholder="Nama Lengkap" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                <select name="kelas" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="">Pilih Kelas</option>
+                    <option value="X">X</option>
+                    <option value="XI">XI</option>
+                    <option value="XII">XII</option>
+                </select>
+                <input type="number" name="nis" placeholder="NIS" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="date" name="tanggal" id="currentDate" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                <textarea name="alasan" placeholder="Alasan Dispensasi" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300 transform">
+                    Kirim Pengajuan
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center text-gray-400 text-sm mt-8 italic">&copy; 2026 SMAN 1 Magetan</p>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('dispensasiForm');
+            const dateInput = document.getElementById('currentDate');
+
+            // Set default tanggal hari ini
+            dateInput.valueAsDate = new Date();
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                google.script.run
+                    .withSuccessHandler(() => {
+                        alert("Pengajuan dispensasi berhasil dikirim ✅");
+                        form.reset();
+                        dateInput.valueAsDate = new Date();
+                    })
+                    .withFailureHandler((err) => {
+                        alert("Terjadi kesalahan ❌");
+                        console.error(err);
+                    })
+                    .simpanDispensasi(
+                        form.nama.value,
+                        form.kelas.value,
+                        form.nis.value,
+                        form.alasan.value,
+                        form.tanggal.value
+                    );
+            });
+        });
+    </script>
+</body>
+</html>
